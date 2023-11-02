@@ -31,7 +31,7 @@
         "description": "发送站点未读消息。",
         "version": "1.0",
         "icon": "unread.png",
-        "color": "#324A5E",
+        "color": "#4179F4",
         "author": "thsrite",
         "level": 2
     },
