@@ -304,5 +304,14 @@
         "color": "#ff9933",
         "author": "thsrite",
         "level": 1
+    },
+    "CloudStrm": {
+        "name": "云盘strm生成",
+        "description": "监控文件创建，生成strm文件。",
+        "version": "1.0",
+        "icon": "https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/icons/cloudstrm.png",
+        "color": "#999999",
+        "author": "thsrite",
+        "level": 1
     }
 }
