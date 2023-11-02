@@ -30,7 +30,7 @@
         "name": "站点未读消息",
         "description": "发送站点未读消息。",
         "version": "1.0",
-        "icon": "unread.png",
+        "icon": "https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/icons/unread.png",
         "color": "#4179F4",
         "author": "thsrite",
         "level": 2
