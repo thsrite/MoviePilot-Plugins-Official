@@ -15,7 +15,6 @@ from app import schemas
 from app.core.config import settings
 from app.core.event import Event
 from app.core.event import eventmanager
-from app.db.models.site import Site
 from app.db.site_oper import SiteOper
 from app.helper.browser import PlaywrightHelper
 from app.helper.module import ModuleHelper
@@ -89,9 +88,9 @@ class SiteStatistic(_PluginBase):
             self._statistic_sites = config.get("statistic_sites") or []
 
             # 过滤掉已删除的站点
-            all_sites = [site.id for site in self.siteoper.list_order_by_pri()] + [site.get("id") for site in
-                                                                                   self.__custom_sites()]
-            self._statistic_sites = [site_id for site_id in all_sites if site_id in self._statistic_sites]
+            all_sites = [site for site in self.sites.get_indexers() if not site.get("public")] + self.__custom_sites()
+            self._statistic_sites = [site.get("id") for site in all_sites if
+                                     not site.get("public") and site.get("id") in self._statistic_sites]
             self.__update_config()
 
         if self._enabled or self._onlyonce:
@@ -128,9 +127,9 @@ class SiteStatistic(_PluginBase):
                                             trigger=CronTrigger.from_crontab(self._cron),
                                             name="站点数据统计")
                 except Exception as err:
-                    logger.error(f"定时任务配置错误：{str(err)}")
+                    logger.error(f"定时任务配置错误：{err}")
                     # 推送实时消息
-                    self.systemmessage.put(f"执行周期配置错误：{str(err)}")
+                    self.systemmessage.put(f"执行周期配置错误：{err}")
             else:
                 triggers = TimerUtils.random_scheduler(num_executions=1,
                                                        begin_hour=0,
@@ -836,7 +835,7 @@ class SiteStatistic(_PluginBase):
                 if site_schema.match(html_text):
                     return site_schema
             except Exception as e:
-                logger.error(f"站点匹配失败 {str(e)}")
+                logger.error(f"站点匹配失败 {e}")
         return None
 
     def build(self, site_info: CommentedMap) -> Optional[ISiteUserInfo]:
@@ -965,7 +964,6 @@ class SiteStatistic(_PluginBase):
         site_url = site_info.get('url')
         if not site_url:
             return None
-        unread_msg_notify = True
         try:
             site_user_info: ISiteUserInfo = self.build(site_info=site_info)
             if site_user_info:
@@ -978,9 +976,6 @@ class SiteStatistic(_PluginBase):
                 if site_user_info.err_msg:
                     self._sites_data.update({site_name: {"err_msg": site_user_info.err_msg}})
                     return None
-
-                # 发送通知，存在未读消息
-                self.__notify_unread_msg(site_name, site_user_info, unread_msg_notify)
 
                 # 分享率接近1时，发送消息提醒
                 if site_user_info.ratio and float(site_user_info.ratio) < 1:
@@ -1011,25 +1006,6 @@ class SiteStatistic(_PluginBase):
         except Exception as e:
             logger.error(f"站点 {site_name} 获取流量数据失败：{str(e)}")
         return None
-
-    def __notify_unread_msg(self, site_name: str, site_user_info: ISiteUserInfo, unread_msg_notify: bool):
-        if site_user_info.message_unread <= 0:
-            return
-        if self._sites_data.get(site_name, {}).get('message_unread') == site_user_info.message_unread:
-            return
-        if not unread_msg_notify:
-            return
-
-        # 解析出内容，则发送内容
-        if len(site_user_info.message_unread_contents) > 0:
-            for head, date, content in site_user_info.message_unread_contents:
-                msg_title = f"【站点 {site_user_info.site_name} 消息】"
-                msg_text = f"时间：{date}\n标题：{head}\n内容：\n{content}"
-                self.post_message(mtype=NotificationType.SiteMessage, title=msg_title, text=msg_text)
-        else:
-            self.post_message(mtype=NotificationType.SiteMessage,
-                              title=f"站点 {site_user_info.site_name} 收到 "
-                                    f"{site_user_info.message_unread} 条新消息，请登陆查看")
 
     @eventmanager.register(EventType.SiteStatistic)
     def refresh(self, event: Event):
