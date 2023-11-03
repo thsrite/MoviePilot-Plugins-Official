@@ -155,7 +155,7 @@
     "MediaServerRefresh": {
         "name": "媒体库服务器刷新",
         "description": "入库后自动刷新Emby/Jellyfin/Plex服务器海报墙。",
-        "version": "1.0",
+        "version": "1.1",
         "icon": "refresh2.png",
         "color": "#347180",
         "author": "jxxghp",
@@ -173,7 +173,7 @@
     "ChatGPT": {
         "name": "ChatGPT",
         "description": "消息交互支持与ChatGPT对话。",
-        "version": "1.0",
+        "version": "1.1",
         "icon": "chatgpt.png",
         "color": "#74AA9C",
         "author": "jxxghp",
