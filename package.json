@@ -20,10 +20,19 @@
     "SiteStatistic": {
         "name": "站点数据统计",
         "description": "自动统计和展示站点数据。",
-        "version": "1.0",
+        "version": "1.1",
         "icon": "statistic.png",
         "color": "#324A5E",
         "author": "lightolly",
+        "level": 2
+    },
+    "SiteUnreadMsg": {
+        "name": "站点未读消息",
+        "description": "发送站点未读消息。",
+        "version": "1.0",
+        "icon": "https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/icons/unread.png",
+        "color": "#4179F4",
+        "author": "thsrite",
         "level": 2
     },
     "SiteRefresh": {
@@ -92,7 +101,7 @@
     "MediaSyncDel": {
         "name": "媒体文件同步删除",
         "description": "同步删除历史记录、源文件和下载任务。",
-        "version": "1.1",
+        "version": "1.2",
         "icon": "mediasyncdel.png",
         "color": "#ff1a1a",
         "author": "thsrite",
@@ -293,6 +302,15 @@
         "version": "1.0",
         "icon": "clouddisk.png",
         "color": "#ff9933",
+        "author": "thsrite",
+        "level": 1
+    },
+    "CloudStrm": {
+        "name": "云盘strm生成",
+        "description": "监控文件创建，生成strm文件。",
+        "version": "1.0",
+        "icon": "https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/icons/cloudstrm.png",
+        "color": "#999999",
         "author": "thsrite",
         "level": 1
     }
